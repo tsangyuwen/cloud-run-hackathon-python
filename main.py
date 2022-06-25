@@ -77,18 +77,24 @@ def move():
     }
     can_i_move = True
     move_to = direction_attack_range_map[my_state['direction']]['move_to']
+    throw_count = 0
     for url, state in bot_state_map.items():
         if url == mybot_url:
             continue
 
         if [state['x'], state['y']] in direction_attack_range_map[my_state['direction']]['can_attack_dims']:
-            return 'T'
+            throw_count += 1
+            continue
 
         calculate_wight(state['x'], state['y'], state['direction'], my_state, action_weight_map, direction_attack_range_map)
         if [state['x'], state['y']] == move_to:
             can_i_move = False
 
     logger.info(action_weight_map)
+
+    if throw_count == 1 and my_state['wasHit']:
+        if not random.randrange(0, 100) == 77:
+            return 'T'
 
     if move_to[0] <= 0 or move_to[1] <= 0 or move_to[0] >= (dims[0] - 2) or move_to[1] >= (dims[1] - 2):
         can_i_move = False
@@ -102,6 +108,9 @@ def move():
         if move == 'T' and weight == 0:
             continue
         return move
+
+    if can_i_move:
+        return 'M'
 
     if 'N' == my_state['direction']:
         return 'R' if x < (dims[0] / 2) else 'L'
@@ -117,7 +126,7 @@ def move():
 
 def calculate_wight(x, y, direction, my_state, action_weight_map, direction_attack_range_map):
     if [x, y, direction] in direction_attack_range_map[my_state['direction']]['possible_attack_dims_with_direction']:
-        action_weight_map['T'] += 1
+        action_weight_map['T'] += 0.5
 
     if [x, y] == direction_attack_range_map[my_state['direction']]['move_attack_dims']:
         action_weight_map['F'] += 1
