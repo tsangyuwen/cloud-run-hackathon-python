@@ -100,7 +100,7 @@ def move():
 
     action_weight_map['T'] += throw_count
 
-    if move_to[0] <= 0 or move_to[1] <= 0 or move_to[0] >= (dims[0] - 2) or move_to[1] >= (dims[1] - 2):
+    if move_to[0] <= 0 or move_to[1] <= 0 or move_to[0] >= (dims[0] - 1) or move_to[1] >= (dims[1] - 1):
         can_i_move = False
 
     # weighted_moves = [k for k, v in sorted(a.items(), key=lambda item: item[1], reverse=True)]
@@ -114,7 +114,7 @@ def move():
         return move
 
     if can_i_move:
-        return 'M'
+        return 'F'
 
     if 'N' == my_state['direction']:
         return 'R' if x < (dims[0] / 2) else 'L'
