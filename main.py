@@ -92,9 +92,13 @@ def move():
 
     logger.info(action_weight_map)
 
-    if throw_count == 1 and my_state['wasHit']:
-        if not random.randrange(0, 100) == 77:
+    if throw_count > 0:
+        if throw_count == 1 and my_state['wasHit'] and random.randrange(0, 100) == 77:
+            pass
+        else:
             return 'T'
+
+    action_weight_map['T'] += throw_count
 
     if move_to[0] <= 0 or move_to[1] <= 0 or move_to[0] >= (dims[0] - 2) or move_to[1] >= (dims[1] - 2):
         can_i_move = False
